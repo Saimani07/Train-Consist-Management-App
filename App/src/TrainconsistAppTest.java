@@ -1,72 +1,85 @@
-import java.util.List;
-
 public class TrainconsistAppTest {
 
     public static void main(String[] args) {
-        testLoopFilteringLogic();
-        testStreamFilteringLogic();
-        testLoopAndStreamResultsMatch();
-        testExecutionTimeMeasurement();
-        testLargeDatasetProcessing();
+        testException_ValidCapacityCreation();
+        testException_NegativeCapacityThrowsException();
+        testException_ZeroCapacityThrowsException();
+        testException_ExceptionMessageValidation();
+        testException_ObjectIntegrityAfterCreation();
+        testException_MultipleValidBogiesCreation();
 
-        System.out.println("\nUC13 All test cases passed successfully.");
+        System.out.println("\nUC14 All test cases passed!");
     }
 
-    static void testLoopFilteringLogic() {
-        List<TrainApp.Bogie> bogies = List.of(
-                new TrainApp.Bogie("Sleeper", 50),
-                new TrainApp.Bogie("AC Chair", 75),
-                new TrainApp.Bogie("First Class", 90)
-        );
+    static void testException_ValidCapacityCreation() {
+        try {
+            TrainApp.PassengerBogie b =
+                    new TrainApp.PassengerBogie("Sleeper", 50);
 
-        List<TrainApp.Bogie> result = TrainApp.filterByLoop(bogies);
+            assert b != null;
+            System.out.println("testException_ValidCapacityCreation passed");
 
-        assert result.size() == 2 : "Loop filtering failed";
-        System.out.println("testLoopFilteringLogic passed");
+        } catch (Exception e) {
+            assert false : "Should not throw exception";
+        }
     }
 
-    static void testStreamFilteringLogic() {
-        List<TrainApp.Bogie> bogies = List.of(
-                new TrainApp.Bogie("Sleeper", 60),
-                new TrainApp.Bogie("AC Chair", 61),
-                new TrainApp.Bogie("First Class", 100)
-        );
+    static void testException_NegativeCapacityThrowsException() {
+        try {
+            new TrainApp.PassengerBogie("AC", -10);
+            assert false : "Exception expected";
 
-        List<TrainApp.Bogie> result = TrainApp.filterByStream(bogies);
-
-        assert result.size() == 2 : "Stream filtering failed";
-        System.out.println("testStreamFilteringLogic passed");
+        } catch (TrainApp.InvalidCapacityException e) {
+            System.out.println("testException_NegativeCapacityThrowsException passed");
+        }
     }
 
-    static void testLoopAndStreamResultsMatch() {
-        List<TrainApp.Bogie> bogies = TrainApp.createTestDataset(1000);
+    static void testException_ZeroCapacityThrowsException() {
+        try {
+            new TrainApp.PassengerBogie("AC", 0);
+            assert false : "Exception expected";
 
-        List<TrainApp.Bogie> loopResult = TrainApp.filterByLoop(bogies);
-        List<TrainApp.Bogie> streamResult = TrainApp.filterByStream(bogies);
-
-        assert loopResult.size() == streamResult.size() : "Loop and Stream results do not match";
-        System.out.println("testLoopAndStreamResultsMatch passed");
+        } catch (TrainApp.InvalidCapacityException e) {
+            System.out.println("testException_ZeroCapacityThrowsException passed");
+        }
     }
 
-    static void testExecutionTimeMeasurement() {
-        List<TrainApp.Bogie> bogies = TrainApp.createTestDataset(1000);
+    static void testException_ExceptionMessageValidation() {
+        try {
+            new TrainApp.PassengerBogie("AC", 0);
+            assert false;
 
-        long start = System.nanoTime();
-        TrainApp.filterByLoop(bogies);
-        long end = System.nanoTime();
-
-        long elapsed = end - start;
-
-        assert elapsed > 0 : "Execution time measurement failed";
-        System.out.println("testExecutionTimeMeasurement passed");
+        } catch (TrainApp.InvalidCapacityException e) {
+            assert e.getMessage().equals("Capacity must be greater than zero");
+            System.out.println("testException_ExceptionMessageValidation passed");
+        }
     }
 
-    static void testLargeDatasetProcessing() {
-        List<TrainApp.Bogie> bogies = TrainApp.createTestDataset(100000);
+    static void testException_ObjectIntegrityAfterCreation() {
+        try {
+            TrainApp.PassengerBogie b =
+                    new TrainApp.PassengerBogie("First Class", 80);
 
-        List<TrainApp.Bogie> result = TrainApp.filterByStream(bogies);
+            assert b.type.equals("First Class");
+            assert b.capacity == 80;
 
-        assert result.size() > 0 : "Large dataset processing failed";
-        System.out.println("testLargeDatasetProcessing passed");
+            System.out.println("testException_ObjectIntegrityAfterCreation passed");
+
+        } catch (Exception e) {
+            assert false;
+        }
+    }
+
+    static void testException_MultipleValidBogiesCreation() {
+        try {
+            new TrainApp.PassengerBogie("Sleeper", 60);
+            new TrainApp.PassengerBogie("AC", 70);
+            new TrainApp.PassengerBogie("First Class", 90);
+
+            System.out.println("testException_MultipleValidBogiesCreation passed");
+
+        } catch (Exception e) {
+            assert false;
+        }
     }
 }
