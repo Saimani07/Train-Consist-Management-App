@@ -1,23 +1,13 @@
-import java.util.Arrays;
-
 public class TrainconsistApp {
 
-    public static boolean binarySearch(String[] bogieIds, String key) {
-        Arrays.sort(bogieIds); // precondition: sorted data
+    public static boolean search(String[] bogieIds, String searchId) {
+        if (bogieIds.length == 0) {
+            throw new IllegalStateException("No bogies available for search");
+        }
 
-        int low = 0;
-        int high = bogieIds.length - 1;
-
-        while (low <= high) {
-            int mid = (low + high) / 2;
-            int cmp = key.compareTo(bogieIds[mid]);
-
-            if (cmp == 0) {
+        for (String id : bogieIds) {
+            if (id.equals(searchId)) {
                 return true;
-            } else if (cmp < 0) {
-                high = mid - 1;
-            } else {
-                low = mid + 1;
             }
         }
 
@@ -25,12 +15,19 @@ public class TrainconsistApp {
     }
 
     public static void main(String[] args) {
-        System.out.println("===== UC19: Binary Search =====");
+        System.out.println("===== UC20: Exception Handling During Search =====");
 
-        String[] bogieIds = {"BG101", "BG205", "BG309", "BG412", "BG550"};
-        String key = "BG309";
+        String[] bogieIds = {};
+        String searchId = "BG101";
 
-        boolean found = binarySearch(bogieIds, key);
+        try {
+            boolean found = search(bogieIds, searchId);
+            System.out.println("Found: " + found);
+        } catch (IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        System.out.println("UC20 execution completed.");
 
         System.out.println("Search ID: " + key);
         System.out.println("Found: " + found);
@@ -92,6 +89,7 @@ public class TrainconsistApp {
 dev
  dev
 dev
+ dev
  dev
  dev
  dev
