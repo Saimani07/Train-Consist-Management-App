@@ -1,49 +1,37 @@
 public class TrainconsistApp {
 
-    static class CargoSafetyException extends RuntimeException {
-        public CargoSafetyException(String message) {
-            super(message);
-        }
-    }
+    public static void bubbleSort(int[] arr) {
+        int n = arr.length;
 
-    static class GoodsBogie {
-        String shape;
-        String cargo;
-        boolean finallyExecuted;
-
-        GoodsBogie(String shape) {
-            this.shape = shape;
-        }
-
-        void assignCargo(String cargo) {
-            try {
-                if (shape.equalsIgnoreCase("Rectangular")
-                        && cargo.equalsIgnoreCase("Petroleum")) {
-                    throw new CargoSafetyException(
-                            "Unsafe: Rectangular bogie cannot carry Petroleum"
-                    );
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
                 }
-
-                this.cargo = cargo;
-                System.out.println("Cargo assigned successfully: " + cargo);
-
-            } catch (CargoSafetyException e) {
-                System.out.println("Error: " + e.getMessage());
-
-            } finally {
-                finallyExecuted = true;
-                System.out.println("Assignment attempt completed");
             }
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println("===== UC15: Safe Cargo Assignment =====");
-
-        GoodsBogie g1 = new GoodsBogie("Cylindrical");
-        g1.assignCargo("Petroleum");
-
+    public static void printArray(int[] arr) {
+        for (int x : arr) {
+            System.out.print(x + " ");
+        }
         System.out.println();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("===== UC16: Bubble Sort =====");
+
+        int[] capacities = {72, 56, 24, 70, 60};
+
+        System.out.print("Original: ");
+        printArray(capacities);
+        bubbleSort(capacities);
+
+        System.out.print("Sorted:   ");
+        printArray(capacities);
 
         GoodsBogie g2 = new GoodsBogie("Rectangular");
         g2.assignCargo("Petroleum");
@@ -93,5 +81,6 @@ public class TrainconsistApp {
 dev
  dev
 dev
+ dev
     }
 }
