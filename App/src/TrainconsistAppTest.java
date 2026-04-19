@@ -1,54 +1,54 @@
 public class TrainconsistAppTest {
 
     public static void main(String[] args) {
-        testSort_BasicSorting();
+        testSort_BasicAlphabeticalSorting();
+        testSort_UnsortedInput();
         testSort_AlreadySortedArray();
-        testSort_DuplicateValues();
+        testSort_DuplicateBogieNames();
         testSort_SingleElementArray();
-        testSort_AllEqualValues();
 
-        System.out.println("UC16 Tests Passed");
+        System.out.println("UC17 Tests Passed");
     }
 
-    static void testSort_BasicSorting() {
-        int[] arr = {72, 56, 24, 70, 60};
-        TrainApp.bubbleSort(arr);
+    static void testSort_BasicAlphabeticalSorting() {
+        String[] arr = {"Sleeper", "AC Chair", "First Class", "General", "Luxury"};
+        TrainApp.sortBogieNames(arr);
 
-        assert isEqual(arr, new int[]{24, 56, 60, 70, 72});
+        assert isEqual(arr, new String[]{"AC Chair", "First Class", "General", "Luxury", "Sleeper"});
+    }
+
+    static void testSort_UnsortedInput() {
+        String[] arr = {"Luxury", "General", "Sleeper", "AC Chair"};
+        TrainApp.sortBogieNames(arr);
+
+        assert isEqual(arr, new String[]{"AC Chair", "General", "Luxury", "Sleeper"});
     }
 
     static void testSort_AlreadySortedArray() {
-        int[] arr = {24, 56, 60, 70, 72};
-        TrainApp.bubbleSort(arr);
+        String[] arr = {"AC Chair", "First Class", "General"};
+        TrainApp.sortBogieNames(arr);
 
-        assert isEqual(arr, new int[]{24, 56, 60, 70, 72});
+        assert isEqual(arr, new String[]{"AC Chair", "First Class", "General"});
     }
 
-    static void testSort_DuplicateValues() {
-        int[] arr = {72, 56, 56, 24};
-        TrainApp.bubbleSort(arr);
+    static void testSort_DuplicateBogieNames() {
+        String[] arr = {"Sleeper", "AC Chair", "Sleeper", "General"};
+        TrainApp.sortBogieNames(arr);
 
-        assert isEqual(arr, new int[]{24, 56, 56, 72});
+        assert isEqual(arr, new String[]{"AC Chair", "General", "Sleeper", "Sleeper"});
     }
 
     static void testSort_SingleElementArray() {
-        int[] arr = {50};
-        TrainApp.bubbleSort(arr);
+        String[] arr = {"Sleeper"};
+        TrainApp.sortBogieNames(arr);
 
-        assert isEqual(arr, new int[]{50});
+        assert isEqual(arr, new String[]{"Sleeper"});
     }
 
-    static void testSort_AllEqualValues() {
-        int[] arr = {40, 40, 40};
-        TrainApp.bubbleSort(arr);
-
-        assert isEqual(arr, new int[]{40, 40, 40});
-    }
-
-    static boolean isEqual(int[] a, int[] b) {
+    static boolean isEqual(String[] a, String[] b) {
         if (a.length != b.length) return false;
         for (int i = 0; i < a.length; i++) {
-            if (a[i] != b[i]) return false;
+            if (!a[i].equals(b[i])) return false;
         }
         return true;
     }
