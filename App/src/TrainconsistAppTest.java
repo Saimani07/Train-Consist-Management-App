@@ -1,85 +1,50 @@
 public class TrainconsistAppTest {
 
     public static void main(String[] args) {
-        testException_ValidCapacityCreation();
-        testException_NegativeCapacityThrowsException();
-        testException_ZeroCapacityThrowsException();
-        testException_ExceptionMessageValidation();
-        testException_ObjectIntegrityAfterCreation();
-        testException_MultipleValidBogiesCreation();
+        testCargo_SafeAssignment();
+        testCargo_UnsafeAssignmentHandled();
+        testCargo_CargoNotAssignedAfterFailure();
+        testCargo_ProgramContinuesAfterException();
+        testCargo_FinallyBlockExecution();
 
-        System.out.println("\nUC14 All test cases passed!");
+        System.out.println("UC15 Tests Passed");
     }
 
-    static void testException_ValidCapacityCreation() {
-        try {
-            TrainApp.PassengerBogie b =
-                    new TrainApp.PassengerBogie("Sleeper", 50);
+    static void testCargo_SafeAssignment() {
+        TrainApp.GoodsBogie g = new TrainApp.GoodsBogie("Cylindrical");
+        g.assignCargo("Petroleum");
 
-            assert b != null;
-            System.out.println("testException_ValidCapacityCreation passed");
-
-        } catch (Exception e) {
-            assert false : "Should not throw exception";
-        }
+        assert "Petroleum".equals(g.cargo);
     }
 
-    static void testException_NegativeCapacityThrowsException() {
-        try {
-            new TrainApp.PassengerBogie("AC", -10);
-            assert false : "Exception expected";
+    static void testCargo_UnsafeAssignmentHandled() {
+        TrainApp.GoodsBogie g = new TrainApp.GoodsBogie("Rectangular");
+        g.assignCargo("Petroleum");
 
-        } catch (TrainApp.InvalidCapacityException e) {
-            System.out.println("testException_NegativeCapacityThrowsException passed");
-        }
+        assert g.cargo == null;
     }
 
-    static void testException_ZeroCapacityThrowsException() {
-        try {
-            new TrainApp.PassengerBogie("AC", 0);
-            assert false : "Exception expected";
+    static void testCargo_CargoNotAssignedAfterFailure() {
+        TrainApp.GoodsBogie g = new TrainApp.GoodsBogie("Rectangular");
+        g.assignCargo("Petroleum");
 
-        } catch (TrainApp.InvalidCapacityException e) {
-            System.out.println("testException_ZeroCapacityThrowsException passed");
-        }
+        assert g.cargo == null;
     }
 
-    static void testException_ExceptionMessageValidation() {
-        try {
-            new TrainApp.PassengerBogie("AC", 0);
-            assert false;
+    static void testCargo_ProgramContinuesAfterException() {
+        TrainApp.GoodsBogie g1 = new TrainApp.GoodsBogie("Rectangular");
+        TrainApp.GoodsBogie g2 = new TrainApp.GoodsBogie("Cylindrical");
 
-        } catch (TrainApp.InvalidCapacityException e) {
-            assert e.getMessage().equals("Capacity must be greater than zero");
-            System.out.println("testException_ExceptionMessageValidation passed");
-        }
+        g1.assignCargo("Petroleum");
+        g2.assignCargo("Coal");
+
+        assert "Coal".equals(g2.cargo);
     }
 
-    static void testException_ObjectIntegrityAfterCreation() {
-        try {
-            TrainApp.PassengerBogie b =
-                    new TrainApp.PassengerBogie("First Class", 80);
+    static void testCargo_FinallyBlockExecution() {
+        TrainApp.GoodsBogie g = new TrainApp.GoodsBogie("Rectangular");
+        g.assignCargo("Petroleum");
 
-            assert b.type.equals("First Class");
-            assert b.capacity == 80;
-
-            System.out.println("testException_ObjectIntegrityAfterCreation passed");
-
-        } catch (Exception e) {
-            assert false;
-        }
-    }
-
-    static void testException_MultipleValidBogiesCreation() {
-        try {
-            new TrainApp.PassengerBogie("Sleeper", 60);
-            new TrainApp.PassengerBogie("AC", 70);
-            new TrainApp.PassengerBogie("First Class", 90);
-
-            System.out.println("testException_MultipleValidBogiesCreation passed");
-
-        } catch (Exception e) {
-            assert false;
-        }
+        assert g.finallyExecuted;
     }
 }
