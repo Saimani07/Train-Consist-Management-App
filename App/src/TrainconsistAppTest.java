@@ -1,49 +1,42 @@
 public class TrainconsistAppTest {
 
     public static void main(String[] args) {
-        testBinarySearch_BogieFound();
-        testBinarySearch_BogieNotFound();
-        testBinarySearch_FirstElementMatch();
-        testBinarySearch_LastElementMatch();
-        testBinarySearch_SingleElementArray();
-        testBinarySearch_EmptyArray();
-        testBinarySearch_UnsortedInputHandled();
+        testSearch_ThrowsExceptionWhenEmpty();
+        testSearch_AllowsSearchWhenDataExists();
+        testSearch_BogieFoundAfterValidation();
+        testSearch_BogieNotFoundAfterValidation();
+        testSearch_SingleElementValidCase();
 
-        System.out.println("UC19 Tests Passed");
+        System.out.println("UC20 Tests Passed");
     }
 
-    static void testBinarySearch_BogieFound() {
-        String[] arr = {"BG101", "BG205", "BG309", "BG412", "BG550"};
-        assert TrainApp.binarySearch(arr, "BG309");
+    static void testSearch_ThrowsExceptionWhenEmpty() {
+        try {
+            TrainApp.search(new String[]{}, "BG101");
+            assert false;
+        } catch (IllegalStateException e) {
+            assert e.getMessage().equals("No bogies available for search");
+        }
     }
 
-    static void testBinarySearch_BogieNotFound() {
-        String[] arr = {"BG101", "BG205", "BG309", "BG412", "BG550"};
-        assert !TrainApp.binarySearch(arr, "BG999");
+    static void testSearch_AllowsSearchWhenDataExists() {
+        String[] arr = {"BG101", "BG205"};
+        boolean result = TrainApp.search(arr, "BG101");
+        assert result;
     }
 
-    static void testBinarySearch_FirstElementMatch() {
-        String[] arr = {"BG101", "BG205", "BG309", "BG412", "BG550"};
-        assert TrainApp.binarySearch(arr, "BG101");
+    static void testSearch_BogieFoundAfterValidation() {
+        String[] arr = {"BG101", "BG205", "BG309"};
+        assert TrainApp.search(arr, "BG205");
     }
 
-    static void testBinarySearch_LastElementMatch() {
-        String[] arr = {"BG101", "BG205", "BG309", "BG412", "BG550"};
-        assert TrainApp.binarySearch(arr, "BG550");
+    static void testSearch_BogieNotFoundAfterValidation() {
+        String[] arr = {"BG101", "BG205", "BG309"};
+        assert !TrainApp.search(arr, "BG999");
     }
 
-    static void testBinarySearch_SingleElementArray() {
+    static void testSearch_SingleElementValidCase() {
         String[] arr = {"BG101"};
-        assert TrainApp.binarySearch(arr, "BG101");
-    }
-
-    static void testBinarySearch_EmptyArray() {
-        String[] arr = {};
-        assert !TrainApp.binarySearch(arr, "BG101");
-    }
-
-    static void testBinarySearch_UnsortedInputHandled() {
-        String[] arr = {"BG309", "BG101", "BG550", "BG205", "BG412"};
-        assert TrainApp.binarySearch(arr, "BG205");
+        assert TrainApp.search(arr, "BG101");
     }
 }
